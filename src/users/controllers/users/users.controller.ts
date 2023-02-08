@@ -9,6 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
+import { CreateUserProfile } from 'src/users/dtos/CreateUserProfile.dto';
 import { UpdateUserDto } from 'src/users/dtos/UpdateUser.dto';
 import { UsersService } from 'src/users/services/users/users.service';
 
@@ -19,6 +20,11 @@ export class UsersController {
   @Get()
   getUsers() {
     return this.usersService.findUsers();
+  }
+
+  @Get(':id')
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findUserById(id);
   }
 
   @Post()
@@ -37,5 +43,13 @@ export class UsersController {
   @Delete(':id')
   deleteUserById(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
+  }
+
+  @Post(':id/profile')
+  createProfileByUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createProfileUserDto: CreateUserProfile,
+  ) {
+    return this.usersService.createUserProfile(id, createProfileUserDto);
   }
 }
